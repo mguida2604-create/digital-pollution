@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Digital Pollution – Meet Rob8</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@700;800&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #1a1a17;
+      --bg2: #232320;
+      --orange: #ff6b1a;
+      --orange2: #ffad60;
+      --green: #4caf7d;
+      --text: #f0ede6;
+      --muted: #8a8880;
+      --card: #242420;
+      --border: rgba(255,255,255,0.07);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Space Mono', monospace;
+      overflow-x: hidden;
+    }
+
+    /* GRID BG */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,107,26,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,107,26,0.04) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 40px;
+      background: rgba(26,26,23,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: 'Syne', sans-serif;
+      font-size: 18px; font-weight: 800;
+      color: var(--orange);
+      letter-spacing: -0.5px;
+    }
+    .nav-logo span { color: var(--text); }
+    .nav-badge {
+      font-size: 11px;
+      background: var(--orange);
+      color: #000;
+      padding: 4px 10px;
+      border-radius: 99px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    /* HERO */
+    .hero {
+      position: relative; z-index: 1;
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column;
+      text-align: center;
+      padding: 120px 24px 60px;
+      gap: 0;
+    }
+    .hero-eyebrow {
+      font-size: 11px;
+      letter-spacing: 3px;
+      color: var(--orange);
+      text-transform: uppercase;
+      margin-bottom: 24px;
+      opacity: 0;
+      animation: fadeUp 0.6s 0.2s forwards;
+    }
+    .hero h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(42px, 8vw, 96px);
+      font-weight: 800;
+      line-height: 0.95;
+      letter-spacing: -3px;
+      margin-bottom: 28px;
+      opacity: 0;
+      animation: fadeUp 0.6s 0.4s forwards;
+    }
+    .hero h1 em {
+      font-style: normal;
+      color: var(--orange);
+    }
+    .hero-sub {
+      font-size: clamp(13px, 2vw, 16px);
+      color: var(--muted);
+      max-width: 460px;
+      line-height: 1.8;
+      margin-bottom: 44px;
+      opacity: 0;
+      animation: fadeUp 0.6s 0.6s forwards;
+    }
+    .hero-cta {
+      display: flex; gap: 12px; flex-wrap: wrap; justify-content: center;
+      opacity: 0;
+      animation: fadeUp 0.6s 0.8s forwards;
+    }
+    .btn-primary {
+      background: var(--orange);
+      color: #000;
+      padding: 14px 32px;
+      border-radius: 12px;
+      font-family: 'Space Mono', monospace;
+      font-size: 13px; font-weight: 700;
+      text-decoration: none;
+      letter-spacing: 0.5px;
+      transition: transform 0.15s, box-shadow 0.15s;
+      box-shadow: 0 0 0 rgba(255,107,26,0);
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(255,107,26,0.45);
+    }
+    .btn-secondary {
+      background: transparent;
+      color: var(--text);
+      padding: 14px 32px;
+      border-radius: 12px;
+      font-family: 'Space Mono', monospace;
+      font-size: 13px;
+      text-decoration: none;
+      border: 1px solid var(--border);
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .btn-secondary:hover {
+      border-color: var(--orange);
+      background: rgba(255,107,26,0.06);
+    }
+
+    /* ROB8 */
+    .rob8-wrapper {
+      margin: 60px auto 0;
+      opacity: 0;
+      animation: fadeUp 0.8s 1s forwards;
+    }
+    .rob8-svg {
+      width: 160px; height: 160px;
+    }
+    .rob8-eye { animation: blink 4s 2s infinite; }
+    @keyframes blink {
+      0%,90%,100% { transform: scaleY(1); }
+      95% { transform: scaleY(0.08); }
+    }
+    .rob8-antenna { animation: antennaWiggle 3s ease-in-out infinite; transform-origin: bottom center; }
+    @keyframes antennaWiggle {
+      0%,100% { transform: rotate(0deg); }
+      40% { transform: rotate(8deg); }
+      70% { transform: rotate(-6deg); }
+    }
+    .rob8-label {
+      text-align: center;
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 12px;
+      letter-spacing: 1px;
+    }
+
+    /* FACTS TICKER */
+    .ticker-wrap {
+      position: relative; z-index: 1;
+      overflow: hidden;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 0;
+      background: rgba(255,107,26,0.05);
+    }
+    .ticker {
+      display: flex; gap: 80px; white-space: nowrap;
+      animation: ticker 28s linear infinite;
+    }
+    .ticker-item {
+      font-size: 12px;
+      color: var(--orange2);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    @keyframes ticker {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* SECTION */
+    section {
+      position: relative; z-index: 1;
+      padding: 100px 24px;
+    }
+    .section-inner {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .section-label {
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 16px;
+    }
+    .section-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(28px, 5vw, 52px);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -1.5px;
+      margin-bottom: 20px;
+    }
+    .section-body {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.9;
+      max-width: 540px;
+    }
+
+    /* FEATURES GRID */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+      margin-top: 56px;
+    }
+    .feature-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 28px;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .feature-card:hover {
+      border-color: rgba(255,107,26,0.35);
+      transform: translateY(-3px);
+    }
+    .feature-icon {
+      font-size: 28px;
+      margin-bottom: 16px;
+      display: block;
+    }
+    .feature-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 18px;
+      font-weight: 800;
+      margin-bottom: 10px;
+      letter-spacing: -0.5px;
+    }
+    .feature-desc {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    /* STATS ROW */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2px;
+      margin-top: 56px;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+    }
+    .stat-box {
+      background: var(--card);
+      padding: 36px 28px;
+      text-align: center;
+      border-right: 1px solid var(--border);
+    }
+    .stat-box:last-child { border-right: none; }
+    .stat-num {
+      font-family: 'Syne', sans-serif;
+      font-size: 44px;
+      font-weight: 800;
+      color: var(--orange);
+      letter-spacing: -2px;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+    .stat-label {
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing: 1px;
+    }
+
+    /* MOOD ROW */
+    .mood-row {
+      display: flex; gap: 12px; flex-wrap: wrap;
+      margin-top: 48px;
+    }
+    .mood-chip {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 99px;
+      padding: 10px 20px;
+      font-size: 13px;
+      display: flex; align-items: center; gap: 8px;
+      transition: border-color 0.2s;
+    }
+    .mood-chip:hover { border-color: var(--orange); }
+
+    /* BAR DEMO */
+    .bars-demo {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 28px;
+      margin-top: 48px;
+      max-width: 420px;
+    }
+    .bar-row { margin-bottom: 18px; }
+    .bar-row:last-child { margin-bottom: 0; }
+    .bar-meta {
+      display: flex; justify-content: space-between;
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .bar-track {
+      height: 6px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .bar-fill {
+      height: 100%;
+      border-radius: 3px;
+      transform: scaleX(0);
+      transform-origin: left;
+      animation: fillBar 1.2s cubic-bezier(.16,1,.3,1) forwards;
+    }
+    @keyframes fillBar { to { transform: scaleX(1); } }
+
+    /* FOOTER */
+    footer {
+      position: relative; z-index: 1;
+      border-top: 1px solid var(--border);
+      padding: 40px 40px;
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 16px;
+    }
+    .footer-copy {
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .footer-links {
+      display: flex; gap: 24px;
+    }
+    .footer-links a {
+      font-size: 12px;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .footer-links a:hover { color: var(--orange); }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s, transform 0.7s;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: none;
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Digital<span>Pollution</span></div>
+  <span class="nav-badge">iOS App</span>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <p class="hero-eyebrow">Meet your eco-companion</p>
+  <h1>Fight the<br/><em>invisible</em><br/>pollution.</h1>
+  <p class="hero-sub">
+    Every byte stored on the internet consumes real energy.<br/>
+    Digital Pollution turns awareness into action — with Rob8 by your side.
+  </p>
+  <div class="hero-cta">
+    <a href="#features" class="btn-primary">Discover the App →</a>
+    <a href="#about" class="btn-secondary">Learn More</a>
+  </div>
+  <div class="rob8-wrapper">
+    <!-- Rob8 SVG mascot -->
+    <svg class="rob8-svg" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Antenna -->
+      <g class="rob8-antenna">
+        <line x1="80" y1="30" x2="80" y2="14" stroke="#ff6b1a" stroke-width="3" stroke-linecap="round"/>
+        <circle cx="80" cy="10" r="5" fill="#ff6b1a"/>
+      </g>
+      <!-- Body -->
+      <rect x="32" y="56" width="96" height="72" rx="18" fill="#2e2e2a" stroke="#ff6b1a" stroke-width="1.5"/>
+      <!-- Head -->
+      <rect x="40" y="28" width="80" height="52" rx="16" fill="#3a3a35" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+      <!-- Eyes -->
+      <g class="rob8-eye">
+        <rect x="50" y="42" width="20" height="18" rx="6" fill="#ff6b1a" opacity="0.95"/>
+        <rect x="90" y="42" width="20" height="18" rx="6" fill="#ff6b1a" opacity="0.95"/>
+        <rect x="57" y="47" width="6" height="6" rx="2" fill="#1a1a17"/>
+        <rect x="97" y="47" width="6" height="6" rx="2" fill="#1a1a17"/>
+      </g>
+      <!-- Mouth -->
+      <path d="M64 68 Q80 76 96 68" stroke="#ff6b1a" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+      <!-- Arms -->
+      <rect x="14" y="72" width="18" height="32" rx="9" fill="#2e2e2a" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+      <rect x="128" y="72" width="18" height="32" rx="9" fill="#2e2e2a" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+      <!-- Legs -->
+      <rect x="50" y="126" width="22" height="20" rx="8" fill="#2e2e2a" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+      <rect x="88" y="126" width="22" height="20" rx="8" fill="#2e2e2a" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+      <!-- Chest display -->
+      <rect x="52" y="70" width="56" height="32" rx="8" fill="#1a1a17" stroke="rgba(255,107,26,0.25)" stroke-width="1"/>
+      <rect x="58" y="77" width="34" height="4" rx="2" fill="#4caf7d" opacity="0.8"/>
+      <rect x="58" y="85" width="44" height="4" rx="2" fill="#ff6b1a" opacity="0.7"/>
+      <rect x="58" y="93" width="26" height="4" rx="2" fill="#3b8fd1" opacity="0.8"/>
+    </svg>
+    <p class="rob8-label">// Rob8 — your eco-companion</p>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker">
+    <span class="ticker-item">📡 Data centers use 200+ TWh/year globally</span>
+    <span class="ticker-item">🌍 Digital pollution = 4% of CO₂ emissions</span>
+    <span class="ticker-item">💾 90% of stored data is never accessed again</span>
+    <span class="ticker-item">⚡ 1 email stored = ~10g CO₂/year</span>
+    <span class="ticker-item">📡 Data centers use 200+ TWh/year globally</span>
+    <span class="ticker-item">🌍 Digital pollution = 4% of CO₂ emissions</span>
+    <span class="ticker-item">💾 90% of stored data is never accessed again</span>
+    <span class="ticker-item">⚡ 1 email stored = ~10g CO₂/year</span>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-inner">
+    <p class="section-label reveal">// What is data pollution?</p>
+    <h2 class="section-title reveal">The internet has<br/>an invisible cost.</h2>
+    <p class="section-body reveal">
+      Data centers around the world run 24/7 to store our photos, emails, and forgotten files.
+      Most of this energy still comes from non-renewable sources. 
+      Digital Pollution makes this invisible problem visible — and gives you the tools to act.
+    </p>
+    <div class="stats-row reveal">
+      <div class="stat-box">
+        <div class="stat-num">4%</div>
+        <div class="stat-label">global CO₂ emissions</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">90%</div>
+        <div class="stat-label">data never reaccessed</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">200+</div>
+        <div class="stat-label">TWh used per year</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features" style="background: var(--bg2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+  <div class="section-inner">
+    <p class="section-label reveal">// App Features</p>
+    <h2 class="section-title reveal">Everything you need<br/>to track & reduce.</h2>
+    <div class="features-grid">
+      <div class="feature-card reveal">
+        <span class="feature-icon">🤖</span>
+        <div class="feature-title">Meet Rob8</div>
+        <p class="feature-desc">Your personal robot companion reacts to your digital habits. Keep Rob8 happy by reducing your data footprint.</p>
+      </div>
+      <div class="feature-card reveal">
+        <span class="feature-icon">📊</span>
+        <div class="feature-title">Screen Time Limits</div>
+        <p class="feature-desc">Using Apple's Family Controls, set smart limits on apps and track your usage in real time.</p>
+      </div>
+      <div class="feature-card reveal">
+        <span class="feature-icon">🌱</span>
+        <div class="feature-title">CO₂ Tracking</div>
+        <p class="feature-desc">See how much carbon you save each day by reducing unnecessary digital activity and data storage.</p>
+      </div>
+      <div class="feature-card reveal">
+        <span class="feature-icon">🎓</span>
+        <div class="feature-title">Learn & Grow</div>
+        <p class="feature-desc">Daily facts and tips about digital pollution. Build better habits through education and awareness.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ROB8 MOODS -->
+<section>
+  <div class="section-inner">
+    <p class="section-label reveal">// Rob8's Mood System</p>
+    <h2 class="section-title reveal">Rob8 feels what<br/>you do online.</h2>
+    <p class="section-body reveal">Rob8's mood changes based on your digital habits. Keep his stats high — and your footprint low.</p>
+    <div class="mood-row reveal">
+      <div class="mood-chip">😊 Happy — balanced usage</div>
+      <div class="mood-chip">😟 Hungry — too much streaming</div>
+      <div class="mood-chip">😴 Tired — screen overload</div>
+      <div class="mood-chip">🤔 Curious — learning mode</div>
+      <div class="mood-chip">😑 Bored — unused apps piling up</div>
+    </div>
+    <div class="bars-demo reveal">
+      <div class="bar-row">
+        <div class="bar-meta"><span>🍖 Hunger</span><span>72%</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:72%; background:#ff6b1a; animation-delay:0.2s"></div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-meta"><span>⚡ Energy</span><span>55%</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:55%; background:#3b8fd1; animation-delay:0.4s"></div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-meta"><span>📚 Education</span><span>88%</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:88%; background:#4caf7d; animation-delay:0.6s"></div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-meta"><span>🎮 Fun</span><span>40%</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:40%; background:#f5c542; animation-delay:0.8s"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-copy">© 2026 Digital Pollution — Marcello Guida</div>
+  <div class="footer-links">
+    <a href="mailto:marcelloguida2604@icloud.com">Contact</a>
+    <a href="#">Privacy Policy</a>
+    <a href="#">Terms of Use</a>
+  </div>
+</footer>
+
+<script>
+  // Reveal on scroll
+  const reveals = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 80);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
