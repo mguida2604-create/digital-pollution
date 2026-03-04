@@ -1,566 +1,591 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Digital Pollution – Meet Rob8</title>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@700;800&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@700;800;900&display=swap" rel="stylesheet"/>
   <style>
     :root {
-      --bg: #1a1a17;
-      --bg2: #232320;
-      --orange: #ff6b1a;
-      --orange2: #ffad60;
-      --green: #4caf7d;
-      --text: #f0ede6;
-      --muted: #8a8880;
-      --card: #242420;
-      --border: rgba(255,255,255,0.07);
+      --bg:#1a1a17;--bg2:#212120;--orange:#ff6b1a;--orange2:#ffad60;
+      --green:#4caf7d;--blue:#3b8fd1;--yellow:#f5c542;
+      --text:#f0ede6;--muted:#7a7875;--card:#242421;--border:rgba(255,255,255,0.07);
     }
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Space Mono', monospace;
-      overflow-x: hidden;
-    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{background:var(--bg);color:var(--text);font-family:'Space Mono',monospace;overflow-x:hidden;}
+    body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(255,107,26,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,107,26,.03) 1px,transparent 1px);background-size:48px 48px;pointer-events:none;z-index:0;}
 
-    /* GRID BG */
-    body::before {
-      content: '';
-      position: fixed; inset: 0;
-      background-image:
-        linear-gradient(rgba(255,107,26,0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,107,26,0.04) 1px, transparent 1px);
-      background-size: 48px 48px;
-      pointer-events: none;
-      z-index: 0;
-    }
+    nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:18px 40px;background:rgba(26,26,23,.9);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);}
+    .nav-logo{font-family:'Syne',sans-serif;font-size:17px;font-weight:900;color:var(--orange);}
+    .nav-logo span{color:var(--text);}
+    .nav-links{display:flex;gap:28px;align-items:center;}
+    .nav-links a{font-size:11px;color:var(--muted);text-decoration:none;letter-spacing:1px;text-transform:uppercase;transition:color .15s;}
+    .nav-links a:hover{color:var(--text);}
+    .nav-badge{font-size:11px;background:var(--orange);color:#000;padding:5px 12px;border-radius:99px;font-weight:700;}
 
-    /* NAV */
-    nav {
-      position: fixed; top: 0; left: 0; right: 0;
-      z-index: 100;
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 20px 40px;
-      background: rgba(26,26,23,0.85);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
-    }
-    .nav-logo {
-      font-family: 'Syne', sans-serif;
-      font-size: 18px; font-weight: 800;
-      color: var(--orange);
-      letter-spacing: -0.5px;
-    }
-    .nav-logo span { color: var(--text); }
-    .nav-badge {
-      font-size: 11px;
-      background: var(--orange);
-      color: #000;
-      padding: 4px 10px;
-      border-radius: 99px;
-      font-weight: 700;
-      letter-spacing: 0.5px;
-    }
+    .hero{position:relative;z-index:1;min-height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:120px 24px 80px;}
+    .hero-eyebrow{font-size:11px;letter-spacing:3px;color:var(--orange);text-transform:uppercase;margin-bottom:20px;opacity:0;animation:fadeUp .5s .1s forwards;}
+    .hero h1{font-family:'Syne',sans-serif;font-size:clamp(48px,9vw,108px);font-weight:900;line-height:.92;letter-spacing:-4px;margin-bottom:28px;opacity:0;animation:fadeUp .6s .3s forwards;}
+    .hero h1 em{font-style:normal;color:var(--orange);}
+    .hero-sub{font-size:14px;color:var(--muted);max-width:420px;line-height:1.9;margin-bottom:40px;opacity:0;animation:fadeUp .6s .5s forwards;}
+    .hero-cta{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;opacity:0;animation:fadeUp .6s .7s forwards;}
+    .btn{display:inline-block;padding:14px 32px;border-radius:12px;font-family:'Space Mono',monospace;font-size:13px;font-weight:700;text-decoration:none;letter-spacing:.5px;transition:transform .15s,box-shadow .15s;}
+    .btn-primary{background:var(--orange);color:#000;}
+    .btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(255,107,26,.4);}
+    .btn-ghost{background:transparent;color:var(--text);border:1px solid var(--border);}
+    .btn-ghost:hover{border-color:var(--orange);background:rgba(255,107,26,.06);}
 
-    /* HERO */
-    .hero {
-      position: relative; z-index: 1;
-      min-height: 100vh;
-      display: flex; align-items: center; justify-content: center;
-      flex-direction: column;
-      text-align: center;
-      padding: 120px 24px 60px;
-      gap: 0;
-    }
-    .hero-eyebrow {
-      font-size: 11px;
-      letter-spacing: 3px;
-      color: var(--orange);
-      text-transform: uppercase;
-      margin-bottom: 24px;
-      opacity: 0;
-      animation: fadeUp 0.6s 0.2s forwards;
-    }
-    .hero h1 {
-      font-family: 'Syne', sans-serif;
-      font-size: clamp(42px, 8vw, 96px);
-      font-weight: 800;
-      line-height: 0.95;
-      letter-spacing: -3px;
-      margin-bottom: 28px;
-      opacity: 0;
-      animation: fadeUp 0.6s 0.4s forwards;
-    }
-    .hero h1 em {
-      font-style: normal;
-      color: var(--orange);
-    }
-    .hero-sub {
-      font-size: clamp(13px, 2vw, 16px);
-      color: var(--muted);
-      max-width: 460px;
-      line-height: 1.8;
-      margin-bottom: 44px;
-      opacity: 0;
-      animation: fadeUp 0.6s 0.6s forwards;
-    }
-    .hero-cta {
-      display: flex; gap: 12px; flex-wrap: wrap; justify-content: center;
-      opacity: 0;
-      animation: fadeUp 0.6s 0.8s forwards;
-    }
-    .btn-primary {
-      background: var(--orange);
-      color: #000;
-      padding: 14px 32px;
-      border-radius: 12px;
-      font-family: 'Space Mono', monospace;
-      font-size: 13px; font-weight: 700;
-      text-decoration: none;
-      letter-spacing: 0.5px;
-      transition: transform 0.15s, box-shadow 0.15s;
-      box-shadow: 0 0 0 rgba(255,107,26,0);
-    }
-    .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 30px rgba(255,107,26,0.45);
-    }
-    .btn-secondary {
-      background: transparent;
-      color: var(--text);
-      padding: 14px 32px;
-      border-radius: 12px;
-      font-family: 'Space Mono', monospace;
-      font-size: 13px;
-      text-decoration: none;
-      border: 1px solid var(--border);
-      transition: border-color 0.15s, background 0.15s;
-    }
-    .btn-secondary:hover {
-      border-color: var(--orange);
-      background: rgba(255,107,26,0.06);
-    }
+    .rob8-hero{margin:60px auto 0;opacity:0;animation:fadeUp .8s .9s forwards;text-align:center;}
+    .rob8-eye{animation:blink 4s 2s infinite;transform-origin:center;}
+    @keyframes blink{0%,88%,100%{transform:scaleY(1)}93%{transform:scaleY(.06)}}
+    .rob8-arm-l{animation:armWave 3s ease-in-out 1.5s infinite;transform-origin:top right;}
+    @keyframes armWave{0%,100%{transform:rotate(0)}40%{transform:rotate(-18deg)}70%{transform:rotate(8deg)}}
+    .rob8-antenna{animation:antPulse 2s ease-in-out infinite;transform-origin:bottom center;}
+    @keyframes antPulse{0%,100%{transform:rotate(0)}50%{transform:rotate(6deg)}}
+    .rob8-dot{animation:dotP 1.5s ease-in-out infinite;}
+    @keyframes dotP{0%,100%{opacity:1}50%{opacity:.3}}
+    .rob8-label{font-size:11px;color:var(--muted);margin-top:10px;letter-spacing:2px;text-transform:uppercase;}
 
-    /* ROB8 */
-    .rob8-wrapper {
-      margin: 60px auto 0;
-      opacity: 0;
-      animation: fadeUp 0.8s 1s forwards;
-    }
-    .rob8-svg {
-      width: 160px; height: 160px;
-    }
-    .rob8-eye { animation: blink 4s 2s infinite; }
-    @keyframes blink {
-      0%,90%,100% { transform: scaleY(1); }
-      95% { transform: scaleY(0.08); }
-    }
-    .rob8-antenna { animation: antennaWiggle 3s ease-in-out infinite; transform-origin: bottom center; }
-    @keyframes antennaWiggle {
-      0%,100% { transform: rotate(0deg); }
-      40% { transform: rotate(8deg); }
-      70% { transform: rotate(-6deg); }
-    }
-    .rob8-label {
-      text-align: center;
-      font-size: 12px;
-      color: var(--muted);
-      margin-top: 12px;
-      letter-spacing: 1px;
-    }
+    .ticker-wrap{position:relative;z-index:1;overflow:hidden;border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:13px 0;background:rgba(255,107,26,.04);}
+    .ticker{display:flex;gap:80px;white-space:nowrap;animation:ticker 30s linear infinite;}
+    .ticker-item{font-size:11px;color:var(--orange2);letter-spacing:1.5px;text-transform:uppercase;}
+    @keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
-    /* FACTS TICKER */
-    .ticker-wrap {
-      position: relative; z-index: 1;
-      overflow: hidden;
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-      padding: 14px 0;
-      background: rgba(255,107,26,0.05);
-    }
-    .ticker {
-      display: flex; gap: 80px; white-space: nowrap;
-      animation: ticker 28s linear infinite;
-    }
-    .ticker-item {
-      font-size: 12px;
-      color: var(--orange2);
-      letter-spacing: 1px;
-      text-transform: uppercase;
-    }
-    @keyframes ticker {
-      from { transform: translateX(0); }
-      to   { transform: translateX(-50%); }
-    }
+    section{position:relative;z-index:1;padding:100px 24px;}
+    .inner{max-width:1040px;margin:0 auto;}
+    .s-label{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--orange);margin-bottom:14px;}
+    .s-title{font-family:'Syne',sans-serif;font-size:clamp(30px,5vw,56px);font-weight:900;line-height:1.05;letter-spacing:-2px;margin-bottom:18px;}
+    .s-body{font-size:13px;color:var(--muted);line-height:2;max-width:520px;}
 
-    /* SECTION */
-    section {
-      position: relative; z-index: 1;
-      padding: 100px 24px;
-    }
-    .section-inner {
-      max-width: 1000px;
-      margin: 0 auto;
-    }
-    .section-label {
-      font-size: 11px;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      color: var(--orange);
-      margin-bottom: 16px;
-    }
-    .section-title {
-      font-family: 'Syne', sans-serif;
-      font-size: clamp(28px, 5vw, 52px);
-      font-weight: 800;
-      line-height: 1.1;
-      letter-spacing: -1.5px;
-      margin-bottom: 20px;
-    }
-    .section-body {
-      font-size: 14px;
-      color: var(--muted);
-      line-height: 1.9;
-      max-width: 540px;
-    }
+    .phone-section{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;}
+    @media(max-width:760px){.phone-section{grid-template-columns:1fr;}}
+    .phone-wrap{display:flex;justify-content:center;}
+    .phone{width:240px;background:#141412;border-radius:40px;border:1.5px solid rgba(255,255,255,.12);padding:20px 14px 0;box-shadow:0 40px 80px rgba(0,0,0,.6),0 0 0 1px rgba(255,107,26,.08);position:relative;overflow:hidden;}
+    .phone::before{content:'';position:absolute;top:14px;left:50%;transform:translateX(-50%);width:60px;height:5px;background:rgba(255,255,255,.14);border-radius:99px;z-index:2;}
+    .phone-screen{border-radius:0;overflow:hidden;background:#1a1a17;}
+    .tab-bar{display:flex;justify-content:space-around;padding:8px 0 12px;background:#1e1e1b;border-top:1px solid rgba(255,255,255,.06);}
+    .tab{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:7px;color:var(--muted);cursor:pointer;transition:color .2s;padding:2px 6px;}
+    .tab.active{color:var(--orange);}
+    .tab svg{width:15px;height:15px;}
+    .screen{display:none;padding:16px 12px 8px;min-height:280px;}
+    .screen.active{display:block;}
 
-    /* FEATURES GRID */
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 16px;
-      margin-top: 56px;
-    }
-    .feature-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 28px;
-      transition: border-color 0.2s, transform 0.2s;
-    }
-    .feature-card:hover {
-      border-color: rgba(255,107,26,0.35);
-      transform: translateY(-3px);
-    }
-    .feature-icon {
-      font-size: 28px;
-      margin-bottom: 16px;
-      display: block;
-    }
-    .feature-title {
-      font-family: 'Syne', sans-serif;
-      font-size: 18px;
-      font-weight: 800;
-      margin-bottom: 10px;
-      letter-spacing: -0.5px;
-    }
-    .feature-desc {
-      font-size: 13px;
-      color: var(--muted);
-      line-height: 1.7;
-    }
+    .fact-banner{background:var(--orange);border-radius:10px;padding:8px 11px;font-size:9px;color:#000;font-weight:700;margin-bottom:11px;}
+    .stat-card{background:#242421;border-radius:12px;padding:12px;border:1px solid rgba(255,255,255,.06);margin-bottom:11px;}
+    .stat-row-mini{margin-bottom:9px;}
+    .stat-row-mini:last-child{margin-bottom:0;}
+    .stat-meta{display:flex;justify-content:space-between;font-size:8px;color:var(--muted);letter-spacing:.5px;text-transform:uppercase;margin-bottom:4px;}
+    .stat-bar{height:4px;background:rgba(255,255,255,.08);border-radius:2px;overflow:hidden;}
+    .stat-fill{height:100%;border-radius:2px;}
+    .rob8-center{display:flex;flex-direction:column;align-items:center;padding:8px 0;}
+    .rob8-mood{font-size:8px;color:var(--muted);margin-top:5px;letter-spacing:1px;}
 
-    /* STATS ROW */
-    .stats-row {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 2px;
-      margin-top: 56px;
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      overflow: hidden;
-    }
-    .stat-box {
-      background: var(--card);
-      padding: 36px 28px;
-      text-align: center;
-      border-right: 1px solid var(--border);
-    }
-    .stat-box:last-child { border-right: none; }
-    .stat-num {
-      font-family: 'Syne', sans-serif;
-      font-size: 44px;
-      font-weight: 800;
-      color: var(--orange);
-      letter-spacing: -2px;
-      line-height: 1;
-      margin-bottom: 8px;
-    }
-    .stat-label {
-      font-size: 12px;
-      color: var(--muted);
-      letter-spacing: 1px;
-    }
+    .chips-row{display:flex;gap:5px;margin-bottom:10px;}
+    .chip-mini{flex:1;background:#242421;border-radius:8px;padding:6px 3px;text-align:center;border:1px solid rgba(255,255,255,.06);}
+    .chip-num{font-size:11px;font-weight:700;color:var(--text);}
+    .chip-label{font-size:7px;color:var(--muted);letter-spacing:.3px;}
+    .card-swipe{background:#242421;border-radius:14px;overflow:hidden;margin-bottom:8px;}
+    .card-swipe-img{width:100%;height:110px;display:flex;align-items:center;justify-content:center;font-size:32px;background:linear-gradient(135deg,#2a2a26,#1e1e1b);}
+    .card-swipe-meta{padding:8px 10px;display:flex;justify-content:space-between;align-items:center;}
+    .card-swipe-size{font-size:10px;color:var(--text);font-weight:700;}
+    .card-swipe-co2{font-size:9px;color:var(--orange);}
+    .swipe-hint{display:flex;justify-content:space-between;font-size:8px;color:var(--muted);padding:0 2px;letter-spacing:.3px;}
 
-    /* MOOD ROW */
-    .mood-row {
-      display: flex; gap: 12px; flex-wrap: wrap;
-      margin-top: 48px;
-    }
-    .mood-chip {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 99px;
-      padding: 10px 20px;
-      font-size: 13px;
-      display: flex; align-items: center; gap: 8px;
-      transition: border-color 0.2s;
-    }
-    .mood-chip:hover { border-color: var(--orange); }
+    .energy-status{background:#242421;border-radius:12px;padding:11px;text-align:center;margin-bottom:9px;border:1px solid rgba(76,175,125,.2);}
+    .energy-pct{font-family:'Syne',sans-serif;font-size:26px;font-weight:900;color:var(--green);}
+    .energy-lbl{font-size:8px;color:var(--muted);letter-spacing:.8px;text-transform:uppercase;margin-top:1px;}
+    .monitor-row{background:#242421;border-radius:10px;padding:10px;display:flex;align-items:center;gap:8px;margin-bottom:6px;border:1px solid rgba(255,255,255,.06);}
+    .monitor-icon{width:28px;height:28px;background:rgba(255,107,26,.15);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;}
+    .monitor-text{font-size:9px;color:var(--text);font-weight:700;}
+    .monitor-sub{font-size:7px;color:var(--muted);margin-top:1px;}
 
-    /* BAR DEMO */
-    .bars-demo {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 28px;
-      margin-top: 48px;
-      max-width: 420px;
-    }
-    .bar-row { margin-bottom: 18px; }
-    .bar-row:last-child { margin-bottom: 0; }
-    .bar-meta {
-      display: flex; justify-content: space-between;
-      font-size: 11px;
-      color: var(--muted);
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      margin-bottom: 8px;
-    }
-    .bar-track {
-      height: 6px;
-      background: rgba(255,255,255,0.08);
-      border-radius: 3px;
-      overflow: hidden;
-    }
-    .bar-fill {
-      height: 100%;
-      border-radius: 3px;
-      transform: scaleX(0);
-      transform-origin: left;
-      animation: fillBar 1.2s cubic-bezier(.16,1,.3,1) forwards;
-    }
-    @keyframes fillBar { to { transform: scaleX(1); } }
+    .quiz-q{background:#242421;border-radius:10px;padding:10px;font-size:9px;color:var(--text);line-height:1.6;margin-bottom:7px;border:1px solid rgba(255,255,255,.06);}
+    .quiz-opt{padding:7px 9px;border-radius:7px;font-size:8px;margin-bottom:4px;border:1px solid rgba(255,255,255,.07);color:var(--muted);}
+    .quiz-opt.correct{background:rgba(76,175,125,.15);border-color:var(--green);color:var(--green);}
+    .quiz-opt.wrong{background:rgba(220,80,80,.1);border-color:#dc5050;color:#dc5050;}
 
-    /* FOOTER */
-    footer {
-      position: relative; z-index: 1;
-      border-top: 1px solid var(--border);
-      padding: 40px 40px;
-      display: flex; justify-content: space-between; align-items: center;
-      flex-wrap: wrap; gap: 16px;
-    }
-    .footer-copy {
-      font-size: 12px;
-      color: var(--muted);
-    }
-    .footer-links {
-      display: flex; gap: 24px;
-    }
-    .footer-links a {
-      font-size: 12px;
-      color: var(--muted);
-      text-decoration: none;
-      transition: color 0.15s;
-    }
-    .footer-links a:hover { color: var(--orange); }
+    .podcast-card{background:#242421;border-radius:10px;padding:10px;margin-bottom:7px;border:1px solid rgba(255,255,255,.06);}
+    .podcast-show{font-size:7px;color:var(--orange);letter-spacing:.6px;text-transform:uppercase;margin-bottom:2px;}
+    .podcast-ep{font-size:9px;color:var(--text);font-weight:700;margin-bottom:1px;}
+    .podcast-dur{font-size:7px;color:var(--muted);}
+    .podcast-row{display:flex;align-items:center;justify-content:space-between;}
+    .play-btn{width:26px;height:26px;background:var(--orange);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;}
+    .podcast-progress{height:2px;background:rgba(255,255,255,.08);border-radius:2px;margin-top:7px;overflow:hidden;}
+    .podcast-fill{height:100%;width:38%;background:var(--orange);}
 
-    /* ANIMATIONS */
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
+    .features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-top:56px;}
+    .feat-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:28px;transition:border-color .2s,transform .2s;}
+    .feat-card:hover{border-color:rgba(255,107,26,.3);transform:translateY(-3px);}
+    .feat-icon{font-size:26px;margin-bottom:14px;display:block;}
+    .feat-title{font-family:'Syne',sans-serif;font-size:19px;font-weight:800;margin-bottom:8px;letter-spacing:-.5px;}
+    .feat-desc{font-size:12px;color:var(--muted);line-height:1.8;}
+    .feat-tag{display:inline-block;margin-top:12px;font-size:10px;color:var(--orange);letter-spacing:1px;text-transform:uppercase;}
 
-    .reveal {
-      opacity: 0;
-      transform: translateY(24px);
-      transition: opacity 0.7s, transform 0.7s;
-    }
-    .reveal.visible {
-      opacity: 1;
-      transform: none;
-    }
+    .stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));margin-top:56px;border:1px solid var(--border);border-radius:20px;overflow:hidden;}
+    .stat-box{background:var(--card);padding:30px 20px;text-align:center;border-right:1px solid var(--border);}
+    .stat-box:last-child{border-right:none;}
+    .stat-num{font-family:'Syne',sans-serif;font-size:44px;font-weight:900;color:var(--orange);letter-spacing:-2px;line-height:1;margin-bottom:6px;}
+    .stat-lbl{font-size:11px;color:var(--muted);letter-spacing:.8px;}
+
+    .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin-top:56px;border:1px solid var(--border);border-radius:20px;overflow:hidden;}
+    .step{background:var(--card);padding:30px 26px;border-right:1px solid var(--border);}
+    .step:last-child{border-right:none;}
+    .step-num{font-family:'Syne',sans-serif;font-size:48px;font-weight:900;color:rgba(255,107,26,.15);line-height:1;margin-bottom:10px;}
+    .step-title{font-family:'Syne',sans-serif;font-size:17px;font-weight:800;margin-bottom:7px;letter-spacing:-.3px;}
+    .step-body{font-size:12px;color:var(--muted);line-height:1.8;}
+
+    .legal-body{max-width:680px;font-size:13px;line-height:2;}
+    .legal-body p{margin-bottom:16px;color:var(--muted);}
+    .legal-h{font-size:11px;color:var(--orange2);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:5px;}
+    .legal-block{margin-bottom:26px;}
+
+    footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:34px 40px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;}
+    .footer-copy{font-size:11px;color:var(--muted);}
+    .footer-links{display:flex;gap:24px;}
+    .footer-links a{font-size:11px;color:var(--muted);text-decoration:none;transition:color .15s;}
+    .footer-links a:hover{color:var(--orange);}
+
+    @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+    .reveal{opacity:0;transform:translateY(22px);transition:opacity .65s,transform .65s;}
+    .reveal.visible{opacity:1;transform:none;}
   </style>
 </head>
 <body>
 
-<!-- NAV -->
 <nav>
   <div class="nav-logo">Digital<span>Pollution</span></div>
-  <span class="nav-badge">iOS App</span>
+  <div class="nav-links">
+    <a href="#app">App</a>
+    <a href="#features">Features</a>
+    <a href="#how">How it works</a>
+    <a href="#privacy">Privacy</a>
+    <span class="nav-badge">iOS App</span>
+  </div>
 </nav>
 
 <!-- HERO -->
 <section class="hero">
-  <p class="hero-eyebrow">Meet your eco-companion</p>
+  <p class="hero-eyebrow">// your eco-companion is waiting</p>
   <h1>Fight the<br/><em>invisible</em><br/>pollution.</h1>
-  <p class="hero-sub">
-    Every byte stored on the internet consumes real energy.<br/>
-    Digital Pollution turns awareness into action — with Rob8 by your side.
-  </p>
+  <p class="hero-sub">Every byte you store consumes real energy. Digital Pollution turns awareness into action — with Rob8 guiding you every step of the way.</p>
   <div class="hero-cta">
-    <a href="#features" class="btn-primary">Discover the App →</a>
-    <a href="#about" class="btn-secondary">Learn More</a>
+    <a href="#app" class="btn btn-primary">Explore the App →</a>
+    <a href="#how" class="btn btn-ghost">How It Works</a>
   </div>
-  <div class="rob8-wrapper">
-    <!-- Rob8 SVG mascot -->
-    <svg class="rob8-svg" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <!-- Antenna -->
+  <div class="rob8-hero">
+    <svg width="170" height="170" viewBox="0 0 170 170" fill="none">
       <g class="rob8-antenna">
-        <line x1="80" y1="30" x2="80" y2="14" stroke="#ff6b1a" stroke-width="3" stroke-linecap="round"/>
-        <circle cx="80" cy="10" r="5" fill="#ff6b1a"/>
+        <line x1="85" y1="32" x2="85" y2="14" stroke="#ff6b1a" stroke-width="2.5" stroke-linecap="round"/>
+        <circle class="rob8-dot" cx="85" cy="9" r="5" fill="#ff6b1a"/>
       </g>
-      <!-- Body -->
-      <rect x="32" y="56" width="96" height="72" rx="18" fill="#2e2e2a" stroke="#ff6b1a" stroke-width="1.5"/>
-      <!-- Head -->
-      <rect x="40" y="28" width="80" height="52" rx="16" fill="#3a3a35" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
-      <!-- Eyes -->
+      <rect x="42" y="30" width="86" height="54" rx="18" fill="#303030" stroke="rgba(255,107,26,0.2)" stroke-width="1.5"/>
       <g class="rob8-eye">
-        <rect x="50" y="42" width="20" height="18" rx="6" fill="#ff6b1a" opacity="0.95"/>
-        <rect x="90" y="42" width="20" height="18" rx="6" fill="#ff6b1a" opacity="0.95"/>
-        <rect x="57" y="47" width="6" height="6" rx="2" fill="#1a1a17"/>
-        <rect x="97" y="47" width="6" height="6" rx="2" fill="#1a1a17"/>
+        <rect x="52" y="44" width="22" height="18" rx="7" fill="#ff6b1a"/>
+        <rect x="96" y="44" width="22" height="18" rx="7" fill="#ff6b1a"/>
+        <rect x="59" y="49" width="7" height="7" rx="2.5" fill="#1a1a17"/>
+        <rect x="103" y="49" width="7" height="7" rx="2.5" fill="#1a1a17"/>
+        <circle cx="62" cy="51" r="1.5" fill="rgba(255,255,255,0.5)"/>
+        <circle cx="106" cy="51" r="1.5" fill="rgba(255,255,255,0.5)"/>
       </g>
-      <!-- Mouth -->
-      <path d="M64 68 Q80 76 96 68" stroke="#ff6b1a" stroke-width="2.5" stroke-linecap="round" fill="none"/>
-      <!-- Arms -->
-      <rect x="14" y="72" width="18" height="32" rx="9" fill="#2e2e2a" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
-      <rect x="128" y="72" width="18" height="32" rx="9" fill="#2e2e2a" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
-      <!-- Legs -->
-      <rect x="50" y="126" width="22" height="20" rx="8" fill="#2e2e2a" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
-      <rect x="88" y="126" width="22" height="20" rx="8" fill="#2e2e2a" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
-      <!-- Chest display -->
-      <rect x="52" y="70" width="56" height="32" rx="8" fill="#1a1a17" stroke="rgba(255,107,26,0.25)" stroke-width="1"/>
-      <rect x="58" y="77" width="34" height="4" rx="2" fill="#4caf7d" opacity="0.8"/>
-      <rect x="58" y="85" width="44" height="4" rx="2" fill="#ff6b1a" opacity="0.7"/>
-      <rect x="58" y="93" width="26" height="4" rx="2" fill="#3b8fd1" opacity="0.8"/>
+      <path d="M67 70 Q85 80 103 70" stroke="#ff6b1a" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+      <rect x="34" y="60" width="102" height="76" rx="20" fill="#2a2a27" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+      <rect x="54" y="74" width="62" height="36" rx="10" fill="#171714" stroke="rgba(255,107,26,0.2)" stroke-width="1"/>
+      <rect x="60" y="80" width="36" height="4" rx="2" fill="#4caf7d" opacity="0.8"/>
+      <rect x="60" y="88" width="50" height="4" rx="2" fill="#ff6b1a" opacity="0.7"/>
+      <rect x="60" y="96" width="28" height="4" rx="2" fill="#3b8fd1" opacity="0.8"/>
+      <g class="rob8-arm-l"><rect x="14" y="76" width="20" height="34" rx="10" fill="#2a2a27" stroke="rgba(255,255,255,0.06)" stroke-width="1"/></g>
+      <rect x="136" y="76" width="20" height="34" rx="10" fill="#2a2a27" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+      <rect x="52" y="134" width="24" height="22" rx="9" fill="#2a2a27" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+      <rect x="94" y="134" width="24" height="22" rx="9" fill="#2a2a27" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
     </svg>
-    <p class="rob8-label">// Rob8 — your eco-companion</p>
+    <p class="rob8-label">Rob8 — your digital eco-companion</p>
   </div>
 </section>
 
 <!-- TICKER -->
 <div class="ticker-wrap">
   <div class="ticker">
-    <span class="ticker-item">📡 Data centers use 200+ TWh/year globally</span>
+    <span class="ticker-item">📡 Data centers use 200+ TWh/year</span>
     <span class="ticker-item">🌍 Digital pollution = 4% of CO₂ emissions</span>
     <span class="ticker-item">💾 90% of stored data is never accessed again</span>
-    <span class="ticker-item">⚡ 1 email stored = ~10g CO₂/year</span>
-    <span class="ticker-item">📡 Data centers use 200+ TWh/year globally</span>
+    <span class="ticker-item">⚡ 1 email + attachment = ~4g CO₂</span>
+    <span class="ticker-item">📺 3h HD streaming = ~35g CO₂</span>
+    <span class="ticker-item">🏭 Data centers ≈ aviation industry emissions</span>
+    <span class="ticker-item">📡 Data centers use 200+ TWh/year</span>
     <span class="ticker-item">🌍 Digital pollution = 4% of CO₂ emissions</span>
     <span class="ticker-item">💾 90% of stored data is never accessed again</span>
-    <span class="ticker-item">⚡ 1 email stored = ~10g CO₂/year</span>
+    <span class="ticker-item">⚡ 1 email + attachment = ~4g CO₂</span>
+    <span class="ticker-item">📺 3h HD streaming = ~35g CO₂</span>
+    <span class="ticker-item">🏭 Data centers ≈ aviation industry emissions</span>
   </div>
 </div>
 
-<!-- ABOUT -->
-<section id="about">
-  <div class="section-inner">
-    <p class="section-label reveal">// What is data pollution?</p>
-    <h2 class="section-title reveal">The internet has<br/>an invisible cost.</h2>
-    <p class="section-body reveal">
-      Data centers around the world run 24/7 to store our photos, emails, and forgotten files.
-      Most of this energy still comes from non-renewable sources. 
-      Digital Pollution makes this invisible problem visible — and gives you the tools to act.
-    </p>
-    <div class="stats-row reveal">
-      <div class="stat-box">
-        <div class="stat-num">4%</div>
-        <div class="stat-label">global CO₂ emissions</div>
+<!-- APP PREVIEW -->
+<section id="app" style="background:var(--bg2);border-top:1px solid var(--border);">
+  <div class="inner">
+    <div class="phone-section">
+      <div>
+        <p class="s-label reveal">// the app</p>
+        <h2 class="s-title reveal">Five screens.<br/>One mission.</h2>
+        <p class="s-body reveal">Rob8 reacts to everything you do. Swipe through photos, monitor screen time, answer quizzes, and listen to eco-podcasts — all while keeping your digital companion happy and healthy.</p>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:28px;" class="reveal">
+          <span style="background:rgba(255,107,26,.12);border:1px solid rgba(255,107,26,.25);border-radius:99px;padding:6px 14px;font-size:10px;color:var(--orange);">🏠 Home — Rob8 &amp; Stats</span>
+          <span style="background:rgba(255,107,26,.12);border:1px solid rgba(255,107,26,.25);border-radius:99px;padding:6px 14px;font-size:10px;color:var(--orange);">🍖 Hunger — Swipe Photos</span>
+          <span style="background:rgba(59,143,209,.12);border:1px solid rgba(59,143,209,.25);border-radius:99px;padding:6px 14px;font-size:10px;color:var(--blue);">⚡ Energy — Screen Time</span>
+          <span style="background:rgba(76,175,125,.12);border:1px solid rgba(76,175,125,.25);border-radius:99px;padding:6px 14px;font-size:10px;color:var(--green);">📚 Learn — Quiz</span>
+          <span style="background:rgba(245,197,66,.12);border:1px solid rgba(245,197,66,.25);border-radius:99px;padding:6px 14px;font-size:10px;color:var(--yellow);">🎮 Fun — Eco Podcasts</span>
+        </div>
       </div>
-      <div class="stat-box">
-        <div class="stat-num">90%</div>
-        <div class="stat-label">data never reaccessed</div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-num">200+</div>
-        <div class="stat-label">TWh used per year</div>
+
+      <div class="phone-wrap reveal">
+        <div class="phone">
+          <div class="phone-screen">
+
+            <!-- HOME SCREEN -->
+            <div class="screen active" id="screen-home">
+              <div class="fact-banner">💡 You saved ~30g CO₂ today!</div>
+              <div class="stat-card">
+                <div class="stat-row-mini">
+                  <div class="stat-meta"><span>🍖 HUNGER</span><span style="color:var(--orange)">85%</span></div>
+                  <div class="stat-bar"><div class="stat-fill" style="width:85%;background:var(--orange)"></div></div>
+                </div>
+                <div class="stat-row-mini">
+                  <div class="stat-meta"><span>⚡ ENERGY</span><span style="color:var(--blue)">72%</span></div>
+                  <div class="stat-bar"><div class="stat-fill" style="width:72%;background:var(--blue)"></div></div>
+                </div>
+                <div class="stat-row-mini">
+                  <div class="stat-meta"><span>📚 EDUCATION</span><span style="color:var(--green)">60%</span></div>
+                  <div class="stat-bar"><div class="stat-fill" style="width:60%;background:var(--green)"></div></div>
+                </div>
+                <div class="stat-row-mini">
+                  <div class="stat-meta"><span>🎮 FUN</span><span style="color:var(--yellow)">90%</span></div>
+                  <div class="stat-bar"><div class="stat-fill" style="width:90%;background:var(--yellow)"></div></div>
+                </div>
+              </div>
+              <div class="rob8-center">
+                <svg width="60" height="60" viewBox="0 0 170 170" fill="none">
+                  <rect x="42" y="30" width="86" height="54" rx="18" fill="#303030"/>
+                  <rect x="52" y="44" width="22" height="18" rx="7" fill="#ff6b1a"/>
+                  <rect x="96" y="44" width="22" height="18" rx="7" fill="#ff6b1a"/>
+                  <rect x="59" y="49" width="7" height="7" rx="2.5" fill="#1a1a17"/>
+                  <rect x="103" y="49" width="7" height="7" rx="2.5" fill="#1a1a17"/>
+                  <path d="M67 70 Q85 80 103 70" stroke="#ff6b1a" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+                  <rect x="34" y="60" width="102" height="76" rx="20" fill="#2a2a27"/>
+                  <rect x="54" y="74" width="62" height="36" rx="10" fill="#171714"/>
+                  <rect x="60" y="80" width="36" height="4" rx="2" fill="#4caf7d"/>
+                  <rect x="60" y="88" width="50" height="4" rx="2" fill="#ff6b1a"/>
+                  <rect x="60" y="96" width="28" height="4" rx="2" fill="#3b8fd1"/>
+                  <rect x="14" y="76" width="20" height="34" rx="10" fill="#2a2a27"/>
+                  <rect x="136" y="76" width="20" height="34" rx="10" fill="#2a2a27"/>
+                  <rect x="52" y="134" width="24" height="22" rx="9" fill="#2a2a27"/>
+                  <rect x="94" y="134" width="24" height="22" rx="9" fill="#2a2a27"/>
+                </svg>
+                <div class="rob8-mood">Rob8 is happy 😊</div>
+              </div>
+            </div>
+
+            <!-- HUNGER SCREEN -->
+            <div class="screen" id="screen-hunger">
+              <div class="chips-row">
+                <div class="chip-mini"><div class="chip-num" style="color:var(--orange)">142</div><div class="chip-label">remaining</div></div>
+                <div class="chip-mini"><div class="chip-num" style="color:#dc5050">8</div><div class="chip-label">deleted</div></div>
+                <div class="chip-mini"><div class="chip-num" style="color:var(--green)">1.6g</div><div class="chip-label">CO2 saved</div></div>
+              </div>
+              <div class="card-swipe">
+                <div class="card-swipe-img">🏖️</div>
+                <div class="card-swipe-meta">
+                  <div><div class="card-swipe-size">4.2 MB · 📷 Photo</div><div style="font-size:7px;color:var(--muted);margin-top:1px;">Summer 2024</div></div>
+                  <div class="card-swipe-co2">~0.8g CO₂</div>
+                </div>
+              </div>
+              <div class="swipe-hint"><span>← Keep</span><span>Delete →</span></div>
+            </div>
+
+            <!-- ENERGY SCREEN -->
+            <div class="screen" id="screen-energy">
+              <div class="energy-status">
+                <div class="energy-pct">72%</div>
+                <div class="energy-lbl">Energy remaining</div>
+              </div>
+              <div style="font-size:7px;color:var(--muted);letter-spacing:.8px;text-transform:uppercase;margin-bottom:7px;">SCREEN TIME MONITOR</div>
+              <div class="monitor-row">
+                <div class="monitor-icon">⏱️</div>
+                <div><div class="monitor-text">Screen Time Active</div><div class="monitor-sub">2h daily limit set</div></div>
+              </div>
+              <div class="monitor-row">
+                <div class="monitor-icon">📊</div>
+                <div><div class="monitor-text">Today's Usage</div><div class="monitor-sub">47 min so far</div></div>
+              </div>
+              <div class="monitor-row" style="border-color:rgba(255,107,26,.25);">
+                <div class="monitor-icon" style="background:rgba(255,107,26,.2);">🚫</div>
+                <div><div class="monitor-text" style="color:var(--orange)">Auto-block after 2h</div><div class="monitor-sub">Rob8 shields you</div></div>
+              </div>
+            </div>
+
+            <!-- EDU SCREEN -->
+            <div class="screen" id="screen-edu">
+              <div style="font-size:7px;color:var(--muted);letter-spacing:.8px;margin-bottom:7px;text-transform:uppercase;">Q2 of 4 · Score: 1</div>
+              <div class="quiz-q">How much CO₂ does sending one email with an attachment produce?</div>
+              <div class="quiz-opt">0.3 g</div>
+              <div class="quiz-opt correct">✓  4 g — Correct!</div>
+              <div class="quiz-opt wrong">✗  12 g</div>
+              <div class="quiz-opt">50 g</div>
+              <div style="background:rgba(76,175,125,.08);border:1px solid rgba(76,175,125,.25);border-radius:7px;padding:7px 8px;margin-top:5px;font-size:7px;color:var(--muted);line-height:1.7;">💡 A typical email with attachment generates ~4g of CO₂ due to data center energy use.</div>
+            </div>
+
+            <!-- FUN SCREEN -->
+            <div class="screen" id="screen-fun">
+              <div style="font-size:7px;color:var(--muted);letter-spacing:.8px;text-transform:uppercase;margin-bottom:7px;">ECO PODCASTS</div>
+              <div class="podcast-card" style="border-color:rgba(255,107,26,.3);background:#1e1e1b;">
+                <div class="podcast-row">
+                  <div><div class="podcast-show">Sustainability Now</div><div class="podcast-ep">The Hidden Cost of the Cloud</div><div class="podcast-dur">42 min · Playing</div></div>
+                  <div class="play-btn">⏸</div>
+                </div>
+                <div class="podcast-progress"><div class="podcast-fill"></div></div>
+              </div>
+              <div class="podcast-card">
+                <div class="podcast-row">
+                  <div><div class="podcast-show">Green Tech Weekly</div><div class="podcast-ep">Data Centers of the Future</div><div class="podcast-dur">35 min</div></div>
+                  <div class="play-btn" style="background:rgba(255,255,255,.1)">▶</div>
+                </div>
+              </div>
+              <div class="podcast-card">
+                <div class="podcast-row">
+                  <div><div class="podcast-show">Digital Minimalism</div><div class="podcast-ep">Delete to Protect the Planet</div><div class="podcast-dur">28 min</div></div>
+                  <div class="play-btn" style="background:rgba(255,255,255,.1)">▶</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- TAB BAR -->
+            <div class="tab-bar">
+              <div class="tab" onclick="switchTab('home',this)">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+                <span>Home</span>
+              </div>
+              <div class="tab active" onclick="switchTab('hunger',this)">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.5 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h13zm-5 11H10v2h3.5v-2zm2-4H8v2h7.5V10z"/></svg>
+                <span>Hunger</span>
+              </div>
+              <div class="tab" onclick="switchTab('energy',this)">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 2v11h3v9l7-12h-4l4-8z"/></svg>
+                <span>Energy</span>
+              </div>
+              <div class="tab" onclick="switchTab('edu',this)">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 5c-1.11-.35-2.33-.5-3.5-.5-1.95 0-4.05.4-5.5 1.5-1.45-1.1-3.55-1.5-5.5-1.5S2.45 4.9 1 6v14.65c0 .25.25.5.5.5.1 0 .15-.05.25-.05C3.1 20.45 5.05 20 6.5 20c1.95 0 4.05.4 5.5 1.5 1.35-.85 3.8-1.5 5.5-1.5 1.65 0 3.35.3 4.75 1.05.1.05.15.05.25.05.25 0 .5-.25.5-.5V6c-.6-.45-1.25-.75-2-1z"/></svg>
+                <span>Learn</span>
+              </div>
+              <div class="tab" onclick="switchTab('fun',this)">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2c-.83 0-1.5-.67-1.5-1.5S14.67 12 15.5 12s1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm4-3c-.83 0-1.5-.67-1.5-1.5S18.67 9 19.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+                <span>Fun</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
 <!-- FEATURES -->
-<section id="features" style="background: var(--bg2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
-  <div class="section-inner">
-    <p class="section-label reveal">// App Features</p>
-    <h2 class="section-title reveal">Everything you need<br/>to track & reduce.</h2>
+<section id="features">
+  <div class="inner">
+    <p class="s-label reveal">// features</p>
+    <h2 class="s-title reveal">Everything you need<br/>to go digital-clean.</h2>
     <div class="features-grid">
-      <div class="feature-card reveal">
-        <span class="feature-icon">🤖</span>
-        <div class="feature-title">Meet Rob8</div>
-        <p class="feature-desc">Your personal robot companion reacts to your digital habits. Keep Rob8 happy by reducing your data footprint.</p>
+      <div class="feat-card reveal">
+        <span class="feat-icon">🖼️</span>
+        <div class="feat-title">Photo Swiper</div>
+        <p class="feat-desc">Swipe right to delete, left to keep. Every photo you delete saves measurable CO₂. Rob8's hunger meter rises as your library gets lighter.</p>
+        <span class="feat-tag">// Hunger tab</span>
       </div>
-      <div class="feature-card reveal">
-        <span class="feature-icon">📊</span>
-        <div class="feature-title">Screen Time Limits</div>
-        <p class="feature-desc">Using Apple's Family Controls, set smart limits on apps and track your usage in real time.</p>
+      <div class="feat-card reveal">
+        <span class="feat-icon">⏱️</span>
+        <div class="feat-title">Screen Time Shield</div>
+        <p class="feat-desc">Using Apple's Family Controls, the app monitors selected apps and automatically blocks them after 2 hours — protecting Rob8's energy stat in real time.</p>
+        <span class="feat-tag">// Energy tab</span>
       </div>
-      <div class="feature-card reveal">
-        <span class="feature-icon">🌱</span>
-        <div class="feature-title">CO₂ Tracking</div>
-        <p class="feature-desc">See how much carbon you save each day by reducing unnecessary digital activity and data storage.</p>
+      <div class="feat-card reveal">
+        <span class="feat-icon">📚</span>
+        <div class="feat-title">Interactive Quizzes</div>
+        <p class="feat-desc">4 data-backed quiz questions on streaming, email, data centers, and more. Every correct answer increases Rob8's education meter.</p>
+        <span class="feat-tag">// Learn tab</span>
       </div>
-      <div class="feature-card reveal">
-        <span class="feature-icon">🎓</span>
-        <div class="feature-title">Learn & Grow</div>
-        <p class="feature-desc">Daily facts and tips about digital pollution. Build better habits through education and awareness.</p>
+      <div class="feat-card reveal">
+        <span class="feat-icon">🎧</span>
+        <div class="feat-title">Eco Podcasts</div>
+        <p class="feat-desc">Listen to curated podcasts on sustainability, green tech, and digital footprints. Listening boosts Rob8's fun meter and your awareness.</p>
+        <span class="feat-tag">// Fun tab</span>
+      </div>
+      <div class="feat-card reveal">
+        <span class="feat-icon">🤖</span>
+        <div class="feat-title">Rob8 Mood System</div>
+        <p class="feat-desc">4 live stats — Hunger, Energy, Education, Fun — decay over time. Rob8's mood changes based on whichever stat is lowest. Keep them balanced.</p>
+        <span class="feat-tag">// Home tab</span>
+      </div>
+      <div class="feat-card reveal">
+        <span class="feat-icon">🔔</span>
+        <div class="feat-title">Smart Notifications</div>
+        <p class="feat-desc">Get gentle nudges from Rob8 when a stat drops below 50%. Different messages for each stat, with a cooldown to avoid spam.</p>
+        <span class="feat-tag">// Background</span>
       </div>
     </div>
   </div>
 </section>
 
 <!-- ROB8 MOODS -->
-<section>
-  <div class="section-inner">
-    <p class="section-label reveal">// Rob8's Mood System</p>
-    <h2 class="section-title reveal">Rob8 feels what<br/>you do online.</h2>
-    <p class="section-body reveal">Rob8's mood changes based on your digital habits. Keep his stats high — and your footprint low.</p>
-    <div class="mood-row reveal">
-      <div class="mood-chip">😊 Happy — balanced usage</div>
-      <div class="mood-chip">😟 Hungry — too much streaming</div>
-      <div class="mood-chip">😴 Tired — screen overload</div>
-      <div class="mood-chip">🤔 Curious — learning mode</div>
-      <div class="mood-chip">😑 Bored — unused apps piling up</div>
+<section style="background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
+  <div class="inner">
+    <p class="s-label reveal">// Rob8's mood system</p>
+    <h2 class="s-title reveal">Rob8 feels what<br/>you do online.</h2>
+    <p class="s-body reveal">Rob8's mood is set by whichever stat is the lowest. If all four stats stay above 60%, Rob8 is happy. Below that — he reacts.</p>
+    <div class="stats-row reveal">
+      <div class="stat-box"><div style="font-size:26px;margin-bottom:6px;">😊</div><div class="stat-num" style="font-size:22px;letter-spacing:0;">Happy</div><div class="stat-lbl">All stats above 60%</div></div>
+      <div class="stat-box"><div style="font-size:26px;margin-bottom:6px;">😟</div><div class="stat-num" style="font-size:22px;letter-spacing:0;">Hungry</div><div class="stat-lbl">Hunger stat is lowest</div></div>
+      <div class="stat-box"><div style="font-size:26px;margin-bottom:6px;">😴</div><div class="stat-num" style="font-size:22px;letter-spacing:0;">Tired</div><div class="stat-lbl">Energy stat is lowest</div></div>
+      <div class="stat-box"><div style="font-size:26px;margin-bottom:6px;">🤔</div><div class="stat-num" style="font-size:22px;letter-spacing:0;">Curious</div><div class="stat-lbl">Education stat is lowest</div></div>
+      <div class="stat-box"><div style="font-size:26px;margin-bottom:6px;">😑</div><div class="stat-num" style="font-size:22px;letter-spacing:0;">Bored</div><div class="stat-lbl">Fun stat is lowest</div></div>
     </div>
-    <div class="bars-demo reveal">
-      <div class="bar-row">
-        <div class="bar-meta"><span>🍖 Hunger</span><span>72%</span></div>
-        <div class="bar-track"><div class="bar-fill" style="width:72%; background:#ff6b1a; animation-delay:0.2s"></div></div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how">
+  <div class="inner">
+    <p class="s-label reveal">// how it works</p>
+    <h2 class="s-title reveal">Simple by design.</h2>
+    <div class="steps reveal">
+      <div class="step">
+        <div class="step-num">01</div>
+        <div class="step-title">Meet Rob8</div>
+        <p class="step-body">A 5-slide onboarding introduces Rob8 and explains what data pollution is, why it matters, and how you can reduce it.</p>
       </div>
-      <div class="bar-row">
-        <div class="bar-meta"><span>⚡ Energy</span><span>55%</span></div>
-        <div class="bar-track"><div class="bar-fill" style="width:55%; background:#3b8fd1; animation-delay:0.4s"></div></div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div class="step-title">Grant Permissions</div>
+        <p class="step-body">Allow Screen Time access via Family Controls and Photo Library access to unlock all features. Everything stays on your device.</p>
       </div>
-      <div class="bar-row">
-        <div class="bar-meta"><span>📚 Education</span><span>88%</span></div>
-        <div class="bar-track"><div class="bar-fill" style="width:88%; background:#4caf7d; animation-delay:0.6s"></div></div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div class="step-title">Take Daily Actions</div>
+        <p class="step-body">Delete photos, limit screen time, answer quizzes, listen to podcasts. Every action boosts one of Rob8's four stats.</p>
       </div>
-      <div class="bar-row">
-        <div class="bar-meta"><span>🎮 Fun</span><span>40%</span></div>
-        <div class="bar-track"><div class="bar-fill" style="width:40%; background:#f5c542; animation-delay:0.8s"></div></div>
+      <div class="step" style="border-right:none;">
+        <div class="step-num">04</div>
+        <div class="step-title">Track Your Impact</div>
+        <p class="step-body">See CO₂ saved per session and watch Rob8's mood improve as your digital habits change for the better.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- FOOTER -->
+<!-- STATS -->
+<section style="background:var(--bg2);border-top:1px solid var(--border);">
+  <div class="inner">
+    <p class="s-label reveal">// the numbers</p>
+    <h2 class="s-title reveal">The invisible problem<br/>is actually massive.</h2>
+    <div class="stats-row reveal">
+      <div class="stat-box"><div class="stat-num">4%</div><div class="stat-lbl">of global CO₂ emissions</div></div>
+      <div class="stat-box"><div class="stat-num">90%</div><div class="stat-lbl">of data never reaccessed</div></div>
+      <div class="stat-box"><div class="stat-num">35g</div><div class="stat-lbl">CO₂ per 3h HD streaming</div></div>
+      <div class="stat-box"><div class="stat-num">200+</div><div class="stat-lbl">TWh used per year globally</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PRIVACY -->
+<section id="privacy">
+  <div class="inner">
+    <p class="s-label reveal">// legal</p>
+    <h2 class="s-title reveal">Privacy Policy</h2>
+    <div class="legal-body reveal">
+      <p><strong style="color:var(--text)">Last updated:</strong> March 2026</p>
+      <div class="legal-block">
+        <div class="legal-h">Data We Collect</div>
+        <p>Digital Pollution does <strong style="color:var(--text)">not collect, store, or share any personal data</strong>. All data (screen time, usage stats, game progress, photo interactions) is stored exclusively on your device and never transmitted to external servers.</p>
+      </div>
+      <div class="legal-block">
+        <div class="legal-h">Family Controls & Screen Time</div>
+        <p>The app uses Apple's Family Controls framework to monitor device usage. This data is processed locally by Apple's system and is never accessible by us.</p>
+      </div>
+      <div class="legal-block">
+        <div class="legal-h">Photo Library</div>
+        <p>The app requests Photo Library access solely to display photos in the swipe-to-delete feature. No photos are uploaded or stored externally.</p>
+      </div>
+      <div class="legal-block">
+        <div class="legal-h">Third-Party Services</div>
+        <p>We do not use any third-party analytics, advertising, or tracking services.</p>
+      </div>
+      <div class="legal-block">
+        <div class="legal-h">Children's Privacy</div>
+        <p>Our app is designed for families including minors. No personal data is collected from users of any age.</p>
+      </div>
+      <div class="legal-block">
+        <div class="legal-h">Contact</div>
+        <p>Questions? <a href="mailto:marcelloguida2604@gmail.com" style="color:var(--orange)">marcelloguida2604@gmail.com</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TERMS -->
+<section id="terms" style="background:var(--bg2);border-top:1px solid var(--border);">
+  <div class="inner">
+    <p class="s-label reveal">// legal</p>
+    <h2 class="s-title reveal">Terms of Use</h2>
+    <div class="legal-body reveal">
+      <p><strong style="color:var(--text)">Last updated:</strong> March 2026</p>
+      <div class="legal-block">
+        <div class="legal-h">1. Use of the App</div>
+        <p>Digital Pollution is for personal, non-commercial use only. You may not copy, modify, distribute, or reverse-engineer any part without prior written consent.</p>
+      </div>
+      <div class="legal-block">
+        <div class="legal-h">2. Intellectual Property</div>
+        <p>All content, code, and assets — including the Rob8 mascot — are the exclusive property of Marcello Guida and Gennaro Biagino. All rights reserved.</p>
+      </div>
+      <div class="legal-block">
+        <div class="legal-h">3. Disclaimer</div>
+        <p>The app is provided "as is". Environmental impact estimates are approximate and for educational purposes only.</p>
+      </div>
+      <div class="legal-block">
+        <div class="legal-h">4. Limitation of Liability</div>
+        <p>To the maximum extent permitted by law, Marcello Guida and Gennaro Biagino are not liable for any damages arising from use of this application.</p>
+      </div>
+      <div class="legal-block">
+        <div class="legal-h">5. Changes to Terms</div>
+        <p>We may update these Terms at any time. Continued use constitutes acceptance of the new Terms.</p>
+      </div>
+      <div class="legal-block">
+        <div class="legal-h">6. Contact</div>
+        <p><a href="mailto:marcelloguida2604@gmail.com" style="color:var(--orange)">marcelloguida2604@gmail.com</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <footer>
   <div class="footer-copy">© 2026 Digital Pollution — Marcello Guida & Gennaro Biagino</div>
   <div class="footer-links">
-    <a href="/cdn-cgi/l/email-protection#14797566777178787b73617d707526222420547d77787b61703a777b79">Contact</a>
-    <a href="#">Privacy Policy</a>
-    <a href="#">Terms of Use</a>
+    <a href="mailto:marcelloguida2604@gmail.com">Contact</a>
+    <a href="#privacy">Privacy Policy</a>
+    <a href="#terms">Terms of Use</a>
   </div>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-  // Reveal on scroll
-  const reveals = document.querySelectorAll('.reveal');
+<script>
+  function switchTab(name, el) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('screen-' + name).classList.add('active');
+    el.classList.add('active');
+  }
   const obs = new IntersectionObserver((entries) => {
     entries.forEach((e, i) => {
-      if (e.isIntersecting) {
-        setTimeout((
+      if (e.isIntersecting) setTimeout(() => e.target.classList.add('visible'), i * 70);
+    });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
